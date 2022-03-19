@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPS-Reboot</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style/style.css"
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="nav">
+        <div class="nav-links">
+          <!-- <li class="btn nav-btn nav-btn--1">Odin</li> -->
+          <div class="btn nav-btn nav-btn--2">The Rules</div>
+          <div class="btn nav-btn nav-btn--3">Reset</div>
+        </div>
+      </div>
+      <div class="title-bar">
+        <div class="title-container">
+          <img
+            src="./image/rock-title-color.svg"
+            class="title title-image title-image--01"
+          />
+          <img
+            src="./image/paper-title-color.svg"
+            class="title title-image title-image--02"
+          />
+          <img
+            src="./image/scissors-title-color.svg"
+            class="title title-image title-image--03"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="alternatives-bar">
+      <div class="alternatives-score-container">
+        <div class="player-score-container score-container">
+          <div class="player-score-text score-text">Your score</div>
+          <div class="player-score score">0</div>
+        </div>
+        <div class="alternatives-container">
+          <div class="alternatives-instruction-text">Choose your technique</div>
+          <div class="alternatives-img-container">
+            <img src="./image/color-rock--1.svg" class="img alternatives-img" />
+            <img
+              src="./image/color-paper--2.svg"
+              class="img alternatives-img"
+            />
+            <img
+              src="./image/color-scissors--3.svg"
+              class="img alternatives-img"
+            />
+          </div>
+        </div>
+        <div class="cpu-score-container score-container">
+          <div class="cpu-score-text score-text">CPU score</div>
+          <div class="cpu-score score">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="current-bar">
+      <div class="current-container">
+        <div class="player-current-move current-move">
+          <img
+            src="./image/color-scissors--3.svg"
+            class="player-current-move-img current-move-img"
+          />
+        </div>
+        <div class="current-text-container">
+          <div class="round-number">Round 3</div>
+          <div class="current-moves-text-container">
+            <div class="player-move-text move-text">You picked scissors</div>
+            <div class="cpu-move-text move-text">CPU picked paper</div>
+          </div>
+          <div class="current-move-result-text">
+            You won this round! Well done.
+          </div>
+        </div>
+        <div class="cpu-current-move current-move">
+          <img
+            src="./image/grey-paper--2.svg"
+            class="cpu-current-move-img current-move-img"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="history-bar">
+      <div class="history-container">
+        <div class="history-row-01 history-row"></div>
+      </div>
+    </div>
+
+    <script src="./script/script.js"></script>
+  </body>
+</html>
