@@ -17,8 +17,8 @@
       <div class="nav">
         <div class="nav-links">
           <!-- <li class="btn nav-btn nav-btn--1">Odin</li> -->
-          <div class="btn nav-btn nav-btn--2">The Rules</div>
-          <div class="btn nav-btn nav-btn--3">Reset</div>
+          <div class="btn nav-btn nav-btn--1">The Rules</div>
+          <div class="btn nav-btn nav-btn--2">Reset</div>
         </div>
       </div>
       <div class="title-bar">
@@ -42,30 +42,33 @@
       <div class="alternatives-score-container">
         <div class="player-score-container score-container">
           <div class="player-score-text score-text">Your score</div>
-          <div class="player-score score">0</div>
+          <div class="player-score score">3</div>
         </div>
         <div class="alternatives-container">
           <div class="alternatives-instruction-text">Choose your technique</div>
           <div class="alternatives-img-container">
-            <img src="./image/color-rock--1.svg" class="img alternatives-img" />
+            <img
+              src="./image/color-rock--1.svg"
+              class="img alternatives-img alt-img-rock"
+            />
             <img
               src="./image/color-paper--2.svg"
-              class="img alternatives-img"
+              class="img alternatives-img alt-img-paper"
             />
             <img
               src="./image/color-scissors--3.svg"
-              class="img alternatives-img"
+              class="img alternatives-img alt-img-scissors"
             />
           </div>
         </div>
         <div class="cpu-score-container score-container">
           <div class="cpu-score-text score-text">CPU score</div>
-          <div class="cpu-score score">0</div>
+          <div class="cpu-score score">1</div>
         </div>
       </div>
     </div>
     <div class="current-bar">
-      <div class="current-container">
+      <div class="current-container current-container-border-win">
         <div class="player-current-move current-move">
           <img
             src="./image/color-scissors--3.svg"
@@ -91,8 +94,50 @@
       </div>
     </div>
     <div class="history-bar">
+      <div class="history-bar-text">Previous rounds</div>
       <div class="history-container">
-        <div class="history-row-01 history-row"></div>
+        <div class="history-row-03 history-row history-row-border-win">
+          <img
+            src="./image/grey-paper--2.svg"
+            class="history-player-move-03 history-img"
+          />
+          <div class="history-text-03 history-text">
+            Round 3 - You picked paper and CPU picked rock.<br />You won the
+            round. Score: You:2 - CPU:1
+          </div>
+          <img
+            src="./image/grey-rock--1.svg"
+            class="history-cpu-move-03 history-img"
+          />
+        </div>
+        <div class="history-row-02 history-row history-row-border-lose">
+          <img
+            src="./image/grey-scissors--3.svg"
+            class="history-player-move-02 history-img"
+          />
+          <div class="history-text-02 history-text">
+            Round 2 - You picked scissors and CPU picked rock.<br />You lost the
+            round. Score: You:1 - CPU:1
+          </div>
+          <img
+            src="./image/grey-rock--1.svg"
+            class="history-cpu-move-02 history-img"
+          />
+        </div>
+        <div class="history-row-01 history-row history-row-border-win">
+          <img
+            src="./image/grey-rock--1.svg"
+            class="history-player-move-01 history-img"
+          />
+          <div class="history-text-01 history-text">
+            Round 1 - You picked rock and CPU picked scissors.<br />You won the
+            round. Score: You:1 - CPU:0
+          </div>
+          <img
+            src="./image/grey-scissors--3.svg"
+            class="history-cpu-move-01 history-img"
+          />
+        </div>
       </div>
     </div>
 
