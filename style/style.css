@@ -9,6 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  /* justify-content: center; */
 }
 
 li {
@@ -93,6 +94,7 @@ li {
   /* border: 1px rgb(35, 189, 194) solid; */
   display: flex;
   flex-direction: column;
+  justify-content: center;
   /* max-width: 30rem; */
   width: 28rem;
   padding-bottom: 1rem;
@@ -113,6 +115,13 @@ li {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   border-bottom: 0.2rem #333333 solid;
+}
+
+.game-over-text {
+  align-self: center;
+  width: 24rem;
+  font-size: 64px;
+  text-align: center;
 }
 
 .score-container {
@@ -155,19 +164,23 @@ li {
   /* padding: 0.25rem 2.5rem; */
 }
 
-.current-container-border-lose {
+.current-container-border-lost {
   border-top: 0.2rem rgb(172, 4, 4) solid;
   border-bottom: 0.2rem rgb(172, 4, 4) solid;
 }
-.current-container-border-win {
+.current-container-border-won {
   border-top: 0.15rem green solid;
   border-bottom: 0.15rem green solid;
+}
+.current-container-border-draw {
+  border-top: 0.15rem #333333 solid;
+  border-bottom: 0.15rem #333333 solid;
 }
 
 .current-move-img {
   /* border: 1px rgb(194, 35, 154) solid; */
   max-width: 6rem;
-  padding: 0 1rem;
+  /* padding: 0 1rem; */
 }
 
 .current-text-container {
@@ -175,6 +188,7 @@ li {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 .current-moves-text-container {
@@ -195,7 +209,7 @@ li {
 }
 
 .move-text {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .history-bar {
@@ -229,24 +243,30 @@ li {
 
 .history-text {
   font-size: 12px;
+  width: 20rem;
+  text-align: center;
 }
 
 .history-img {
   width: 2.5rem;
   align-content: center;
   justify-items: center;
-  padding: 0 2rem;
+  /* padding: 0 2rem; */
   /* transform: rotate(90deg); */
 }
 
-.history-row-border-win {
+.history-row-border-won {
   border-top: 1px green solid;
   border-bottom: 1px green solid;
 }
 
-.history-row-border-lose {
+.history-row-border-lost {
   border-top: 1px rgb(172, 4, 4) solid;
   border-bottom: 1px rgb(172, 4, 4) solid;
+}
+.history-row-border-draw {
+  border-top: 1px #333333 solid;
+  border-bottom: 1px #333333 solid;
 }
 
 .hidden {

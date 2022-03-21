@@ -21,6 +21,7 @@ const altPaperImgEl = document.querySelector('.alt-img-paper');
 const altScissorsImgEl = document.querySelector('.alt-img-scissors');
 const altImgAllEl = document.querySelectorAll('.alternatives-img');
 const altContainerEl = document.querySelector('.alternatives-container');
+const gameOverTextEl = document.querySelector('.game-over-text');
 
 // Current Round
 const currentBarEl = document.querySelector('.current-bar');
@@ -48,73 +49,196 @@ const rps = {
   currentPlayerScore: 0,
   currentCpuScore: 0,
   roundNumber: 0,
-  playerMoves: [],
-  cpuMoves: [],
-  winLoseDraw: [],
-  playerScore: [],
-  cpuScore: [],
+  gameOverResult: undefined,
+  arrs: {
+    playerMoves: [],
+    cpuMoves: [],
+    winLoseDraw: [],
+    playerScore: [],
+    cpuScore: [],
+  },
   /////////////////////////////////////////////
   // Functions
   resetGame() {
-    this.playerMoves = [];
-    this.cpuMoves = [];
-    this.winLoseDraw = [];
-    this.playerScore = [];
-    this.cpuScore = [];
+    // for (let arr in this.arrs) {
+    //   console.log(arr);
+    // }
+    this.arrs.playerMoves = [];
+    this.arrs.cpuMoves = [];
+    this.arrs.winLoseDraw = [];
+    this.arrs.playerScore = [];
+    this.arrs.cpuScore = [];
 
     this.currentPlayerScore = this.currentCpuScore = this.roundNumber = 0;
+    this.gameOverResult = undefined;
+    this.updateUI();
     historyBarEl.classList.add('hidden');
     currentBarEl.classList.add('hidden');
+    gameOverTextEl.classList.add('hidden');
+    altContainerEl.classList.remove('hidden-opacity');
+    altImgAllEl.forEach(el => el.classList.remove('hidden'));
   },
   playRound(playerMove) {
-    this.playerMoves.push(playerMove);
-    this.cpuMoves.push(this.alt[Math.trunc(Math.random() * 3)]);
+    this.arrs.playerMoves.push(playerMove);
+    this.arrs.cpuMoves.push(this.alt[Math.trunc(Math.random() * 3)]);
     this.roundNumber++;
     // console.log(this.roundNumber);
     this.checkWinner();
     // console.log(this.playerMoves.slice(-1), this.cpuMoves.slice(-1));
   },
   checkWinner() {
-    const i = this.playerMoves.length - 1;
-    const pM = this.playerMoves[i];
-    const cM = this.cpuMoves[i];
-    console.log(pM, cM);
+    const i = this.arrs.playerMoves.length - 1;
+    const pM = this.arrs.playerMoves[i];
+    const cM = this.arrs.cpuMoves[i];
+    // console.log(pM, cM);
     if (pM === 'rock') {
       if (cM === 'rock') {
-        this.winLoseDraw.push('draw');
+        this.arrs.winLoseDraw.push('draw');
       } else if (cM === 'paper') {
-        this.winLoseDraw.push('lose');
+        this.arrs.winLoseDraw.push('lost');
       } else {
-        this.winLoseDraw.push('win');
+        this.arrs.winLoseDraw.push('won');
       }
     } else if (pM === 'paper') {
       if (cM === 'rock') {
-        this.winLoseDraw.push('win');
+        this.arrs.winLoseDraw.push('won');
       } else if (cM === 'paper') {
-        this.winLoseDraw.push('draw');
+        this.arrs.winLoseDraw.push('draw');
       } else {
-        this.winLoseDraw.push('lose');
+        this.arrs.winLoseDraw.push('lost');
       }
     } else {
       if (cM === 'rock') {
-        this.winLoseDraw.push('lose');
+        this.arrs.winLoseDraw.push('lost');
       } else if (cM === 'paper') {
-        this.winLoseDraw.push('win');
+        this.arrs.winLoseDraw.push('won');
       } else {
-        this.winLoseDraw.push('draw');
+        this.arrs.winLoseDraw.push('draw');
       }
     }
-    if (this.winLoseDraw[i] === 'win') {
+    if (this.arrs.winLoseDraw[i] === 'won') {
       this.currentPlayerScore++;
-    } else if (this.winLoseDraw[i] === 'lose') {
+    } else if (this.arrs.winLoseDraw[i] === 'lost') {
       this.currentCpuScore++;
     }
-    this.playerScore.push(this.currentPlayerScore);
-    this.cpuScore.push(this.currentCpuScore);
+    this.arrs.playerScore.push(this.currentPlayerScore);
+    this.arrs.cpuScore.push(this.currentCpuScore);
     this.updateUI();
     // console.log(this.winLoseDraw[i]);
   },
-  updateUI() {},
+  checkGameOver() {
+    if (this.currentPlayerScore > 4) {
+      this.gameOverResult = 'win';
+      return true;
+    } else if (this.currentCpuScore > 4) {
+      this.gameOverResult = 'lose';
+      return true;
+    } else {
+      return false;
+    }
+  },
+  updateUI() {
+    playerScoreEl.textContent = this.currentPlayerScore;
+    cpuScoreEl.textContent = this.currentCpuScore;
+    const i = this.roundNumber - 1;
+    currentBarEl.classList.remove(
+      'current-container-border-draw',
+      'current-container-border-won',
+      'current-container-border-lose'
+    );
+    currentBarEl.classList.add(
+      `current-container-border-${this.arrs.winLoseDraw[i]}`
+    );
+    if (this.checkGameOver()) {
+      console.log('game over');
+      gameOverTextEl.classList.remove('hidden');
+      altTextEl.classList.add('hidden-opacity');
+      altImgAllEl.forEach(el => el.classList.add('hidden'));
+
+      currentResultTextEl.textContent = `You ${this.gameOverResult} this round, and you ${this.gameOverResult} the match!`;
+    } else {
+      roundNumberEl.textContent = `Round ${this.roundNumber}`;
+      playerMoveTextEl.textContent = `You picked ${
+        this.arrs.playerMoves[i] || 'rock'
+      }`;
+      cpuMoveTextEl.textContent = `CPU picked ${
+        this.arrs.cpuMoves[i] || 'rock'
+      }`;
+      currentResultTextEl.textContent = `You ${
+        this.arrs.winLoseDraw[i] || 'draw'
+      } this round!`;
+      playerMoveImgEl.src = `./image/color-${
+        this.arrs.playerMoves[i] || 'rock'
+      }.svg`;
+      cpuMoveImgEl.src = `./image/color-${this.arrs.cpuMoves[i] || 'rock'}.svg`;
+      if (this.roundNumber > 0) {
+        currentBarEl.classList.remove('hidden');
+      }
+      this.updateHistory();
+    }
+  },
+  updateHistory() {
+    historyContainerEl.innerHTML = '';
+    if (this.roundNumber > 1) {
+      for (let i = 0; i < this.arrs.winLoseDraw.length - 1; i++) {
+        console.log(this.arrs.winLoseDraw[i], i);
+        const html = `<div class="history-row history-row-border-${
+          this.arrs.winLoseDraw[i]
+        }">
+        <img
+          src="./image/grey-${this.arrs.playerMoves[i]}.svg"
+          class="history-player-move-01 history-img"
+        />
+        <div class="history-text-01 history-text">
+          Round ${i + 1} - You picked ${
+          this.arrs.playerMoves[i]
+        } and CPU picked ${this.arrs.cpuMoves[i]}.<br />You ${
+          this.arrs.winLoseDraw[i]
+        } the round. Score: You:${this.arrs.playerScore[i]} - CPU:${
+          this.arrs.cpuScore[i]
+        }
+        </div>
+        <img
+          src="./image/grey-${this.arrs.cpuMoves[i]}.svg"
+          class="history-cpu-move-01 history-img"
+        />
+      </div>`;
+        historyContainerEl.insertAdjacentHTML('afterbegin', html);
+        historyBarEl.classList.remove('hidden');
+      }
+    }
+  },
+  // updateHistory() {
+  //   historyContainerEl.innerHTML = '';
+  //   if (this.roundNumber > 1) {
+  //     this.arrs.winLoseDraw.forEach((wld, i) => {
+  //       console.log(wld, i);
+  //       const html = `<div class="history-row history-row-border-${
+  //         this.arrs.winLoseDraw[i + 1]
+  //       }">
+  //       <img
+  //         src="./image/grey-${this.arrs.playerMoves[i + 1]}.svg"
+  //         class="history-player-move-01 history-img"
+  //       />
+  //       <div class="history-text-01 history-text">
+  //         Round ${i + 2} - You picked ${
+  //         this.arrs.playerMoves[i + 1]
+  //       } and CPU picked ${this.arrs.cpuMoves[i + 1]}.<br />You ${
+  //         this.arrs.winLoseDraw[i + 1]
+  //       } the round. Score: You:${this.arrs.playerScore[i + 1]} - CPU:${
+  //         this.arrs.cpuScore[i + 1]
+  //       }
+  //       </div>
+  //       <img
+  //         src="./image/grey-${this.arrs.cpuMoves[i + 1]}.svg"
+  //         class="history-cpu-move-01 history-img"
+  //       />
+  //     </div>`;
+  //       historyContainerEl.insertAdjacentHTML('afterbegin', html);
+  //       historyBarEl.classList.remove('hidden');
+  //     });
+  //   }
+  // },
 };
 
 // rps.cpuMove();
@@ -125,27 +249,34 @@ const rps = {
 // console.log(rps.cpuMoves);
 // rps.resetGame();
 // console.log(rps.cpuMoves);
-// rps.resetGame();
-rps.playRound('rock');
-rps.playRound('paper');
-rps.playRound('rock');
-rps.playRound('rock');
-rps.playRound('rock');
-rps.playRound('rock');
-rps.playRound('rock');
-// rps.checkWinner();
-rps.playRound('paper');
+rps.resetGame();
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
+// rps.playRound('paper');
+// rps.playRound('rock');
+// rps.playRound('rock');
+// rps.playRound('rock');
+// rps.playRound('rock');
+// rps.playRound('rock');
 // // rps.checkWinner();
-rps.playRound('scissors');
-// // rps.checkWinner();
-rps.playRound('scissors');
-console.log(rps.winLoseDraw);
-console.log(rps.playerScore, rps.currentPlayerScore);
-console.log(rps.cpuScore, rps.currentCpuScore);
+// rps.playRound('paper');
+// // // rps.checkWinner();
+// rps.playRound('scissors');
+// // // rps.checkWinner();
+// rps.playRound('scissors');
+console.log(rps.arrs.winLoseDraw);
+console.log(rps.arrs.playerScore, rps.currentPlayerScore);
+console.log(rps.arrs.cpuScore, rps.currentCpuScore);
 // rps.resetGame();
-console.log(rps.winLoseDraw);
-console.log(rps.playerScore, rps.currentPlayerScore);
-console.log(rps.cpuScore, rps.currentCpuScore);
+// console.log(rps.arrs.winLoseDraw);
+// console.log(rps.arrs.playerScore, rps.currentPlayerScore);
+// console.log(rps.arrs.cpuScore, rps.currentCpuScore);
 
 // rps.playRound('frog');
 // rps.resetGame();
@@ -156,3 +287,6 @@ console.log(rps.cpuScore, rps.currentCpuScore);
 // altContainerEl.classList.add('hidden-opacity');
 // altImgAllEl.forEach(el => el.classList.add('hidden'));
 // altImgAllEl.classList.add('hidden');
+
+// console.log(rps.arrs);
+// console.log(Object.entries(rps.arrs));
