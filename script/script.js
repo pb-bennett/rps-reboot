@@ -42,16 +42,17 @@ const historyContainerEl = document.querySelector('.history-container');
 // Object
 ////////////////////////////////////
 const rps = {
-  currentScore: [1, 2],
   // currentMoves: ['scissors', 'paper'],
   alt: ['rock', 'paper', 'scissors'],
   outcomes: ['win', 'lose', 'draw'],
+  currentPlayerScore: 0,
+  currentCpuScore: 0,
+  roundNumber: 0,
   playerMoves: [],
   cpuMoves: [],
   winLoseDraw: [],
   playerScore: [],
   cpuScore: [],
-  roundNumber: 0,
   /////////////////////////////////////////////
   // Functions
   resetGame() {
@@ -61,7 +62,7 @@ const rps = {
     this.playerScore = [];
     this.cpuScore = [];
 
-    this.roundNumber = 0;
+    this.currentPlayerScore = this.currentCpuScore = this.roundNumber = 0;
     historyBarEl.classList.add('hidden');
     currentBarEl.classList.add('hidden');
   },
@@ -69,7 +70,7 @@ const rps = {
     this.playerMoves.push(playerMove);
     this.cpuMoves.push(this.alt[Math.trunc(Math.random() * 3)]);
     this.roundNumber++;
-    console.log(this.roundNumber);
+    // console.log(this.roundNumber);
     this.checkWinner();
     // console.log(this.playerMoves.slice(-1), this.cpuMoves.slice(-1));
   },
@@ -103,8 +104,17 @@ const rps = {
         this.winLoseDraw.push('draw');
       }
     }
-    console.log(this.winLoseDraw[i]);
+    if (this.winLoseDraw[i] === 'win') {
+      this.currentPlayerScore++;
+    } else if (this.winLoseDraw[i] === 'lose') {
+      this.currentCpuScore++;
+    }
+    this.playerScore.push(this.currentPlayerScore);
+    this.cpuScore.push(this.currentCpuScore);
+    this.updateUI();
+    // console.log(this.winLoseDraw[i]);
   },
+  updateUI() {},
 };
 
 // rps.cpuMove();
@@ -115,7 +125,7 @@ const rps = {
 // console.log(rps.cpuMoves);
 // rps.resetGame();
 // console.log(rps.cpuMoves);
-rps.resetGame();
+// rps.resetGame();
 rps.playRound('rock');
 rps.playRound('paper');
 rps.playRound('rock');
@@ -130,6 +140,13 @@ rps.playRound('scissors');
 // // rps.checkWinner();
 rps.playRound('scissors');
 console.log(rps.winLoseDraw);
+console.log(rps.playerScore, rps.currentPlayerScore);
+console.log(rps.cpuScore, rps.currentCpuScore);
+// rps.resetGame();
+console.log(rps.winLoseDraw);
+console.log(rps.playerScore, rps.currentPlayerScore);
+console.log(rps.cpuScore, rps.currentCpuScore);
+
 // rps.playRound('frog');
 // rps.resetGame();
 // rps.checkWinner();
