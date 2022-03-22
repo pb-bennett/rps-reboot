@@ -48,7 +48,6 @@ const historyContainerEl = document.querySelector('.history-container');
 // Object
 ////////////////////////////////////
 const rps = {
-  // currentMoves: ['scissors', 'paper'],
   alt: ['rock', 'paper', 'scissors'],
   outcomes: ['win', 'lose', 'draw'],
   currentPlayerScore: 0,
@@ -64,40 +63,34 @@ const rps = {
   },
   /////////////////////////////////////////////
   // Functions
+  // Resets the game state
   resetGame() {
-    // for (let arr in this.arrs) {
-    //   console.log(arr);
-    // }
     this.arrs.playerMoves = [];
     this.arrs.cpuMoves = [];
     this.arrs.winLoseDraw = [];
     this.arrs.playerScore = [];
     this.arrs.cpuScore = [];
-
     this.currentPlayerScore = this.currentCpuScore = this.roundNumber = 0;
     this.gameOverResult = undefined;
-    this.updateUI();
     historyBarEl.classList.add('hidden');
     currentBarEl.classList.add('hidden');
     gameOverTextEl.forEach(el => el.classList.add('hidden'));
     altTextEl.classList.remove('hidden-opacity');
     altImgAllEl.forEach(el => el.classList.remove('hidden'));
     this.updateUI();
-    // console.log('reset');
   },
+  //receives the player move from the click event listeners and generates random cpu move before starting winner check
   playRound(playerMove) {
     this.arrs.playerMoves.push(playerMove);
     this.arrs.cpuMoves.push(this.alt[Math.trunc(Math.random() * 3)]);
     this.roundNumber++;
-    // console.log(this.roundNumber);
     this.checkWinner();
-    // console.log(this.playerMoves.slice(-1), this.cpuMoves.slice(-1));
   },
+  // Function to compare the moves of the player and the CPU and declare the winner
   checkWinner() {
     const i = this.arrs.playerMoves.length - 1;
     const pM = this.arrs.playerMoves[i];
     const cM = this.arrs.cpuMoves[i];
-    // console.log(pM, cM);
     if (pM === 'rock') {
       if (cM === 'rock') {
         this.arrs.winLoseDraw.push('draw');
@@ -123,16 +116,18 @@ const rps = {
         this.arrs.winLoseDraw.push('draw');
       }
     }
+    //Updates current score variables
     if (this.arrs.winLoseDraw[i] === 'won') {
       this.currentPlayerScore++;
     } else if (this.arrs.winLoseDraw[i] === 'lost') {
       this.currentCpuScore++;
     }
+    // stores current score at this round for display in the history section
     this.arrs.playerScore.push(this.currentPlayerScore);
     this.arrs.cpuScore.push(this.currentCpuScore);
     this.updateUI();
-    // console.log(this.winLoseDraw[i]);
   },
+  //Check if game is over - first to reach 5 points
   checkGameOver() {
     if (this.currentPlayerScore > 4) {
       this.gameOverResult = 'win';
@@ -144,6 +139,7 @@ const rps = {
       return false;
     }
   },
+  //  Updates the UI dependent on if game is over
   updateUI() {
     playerScoreEl.textContent = this.currentPlayerScore;
     cpuScoreEl.textContent = this.currentCpuScore;
@@ -158,7 +154,6 @@ const rps = {
       `current-container-border-${this.arrs.winLoseDraw[i]}`
     );
     if (this.checkGameOver()) {
-      // console.log('game over');
       gameOverTextEl.forEach(el => el.classList.remove('hidden'));
       altTextEl.classList.add('hidden-opacity');
       altImgAllEl.forEach(el => el.classList.add('hidden'));
@@ -184,11 +179,11 @@ const rps = {
       this.updateHistory();
     }
   },
+  // Adds history elements to keep a record of each round of the game
   updateHistory() {
     historyContainerEl.innerHTML = '';
     if (this.roundNumber > 1) {
       for (let i = 0; i < this.arrs.winLoseDraw.length - 1; i++) {
-        // console.log(this.arrs.winLoseDraw[i], i);
         const html = `<div class="history-row history-row-border-${
           this.arrs.winLoseDraw[i]
         }">
@@ -220,7 +215,6 @@ const rps = {
       el.src = `./image/grey-${el.dataset.move}.svg`;
     });
     titleImgAllEl.forEach(el => {
-      // console.log(el);
       el.src = `./image/${el.dataset.move}-title-grey.svg`;
     });
     target1.src = `./image/color-${target1.dataset.move}.svg`;
@@ -231,114 +225,30 @@ const rps = {
       el.src = `./image/color-${el.dataset.move}.svg`;
     });
     titleImgAllEl.forEach(el => {
-      // console.log(el);
       el.src = `./image/${el.dataset.move}-title-color.svg`;
     });
   },
 };
-// updateHistory() {
-//   historyContainerEl.innerHTML = '';
-//   if (this.roundNumber > 1) {
-//     this.arrs.winLoseDraw.forEach((wld, i) => {
-//       console.log(wld, i);
-//       const html = `<div class="history-row history-row-border-${
-//         this.arrs.winLoseDraw[i + 1]
-//       }">
-//       <img
-//         src="./image/grey-${this.arrs.playerMoves[i + 1]}.svg"
-//         class="history-player-move-01 history-img"
-//       />
-//       <div class="history-text-01 history-text">
-//         Round ${i + 2} - You picked ${
-//         this.arrs.playerMoves[i + 1]
-//       } and CPU picked ${this.arrs.cpuMoves[i + 1]}.<br />You ${
-//         this.arrs.winLoseDraw[i + 1]
-//       } the round. Score: You:${this.arrs.playerScore[i + 1]} - CPU:${
-//         this.arrs.cpuScore[i + 1]
-//       }
-//       </div>
-//       <img
-//         src="./image/grey-${this.arrs.cpuMoves[i + 1]}.svg"
-//         class="history-cpu-move-01 history-img"
-//       />
-//     </div>`;
-//       historyContainerEl.insertAdjacentHTML('afterbegin', html);
-//       historyBarEl.classList.remove('hidden');
-//     });
-//   }
-// },
-// };
-
-// rps.cpuMove();
-// rps.cpuMove();
-// rps.cpuMove();
-// rps.cpuMove();
-
-// console.log(rps.cpuMoves);
-// rps.resetGame();
-// console.log(rps.cpuMoves);
-// rps.resetGame();
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
-// rps.playRound('paper');
-// rps.playRound('rock');
-// rps.playRound('rock');
-// rps.playRound('rock');
-// rps.playRound('rock');
-// rps.playRound('rock');
-// // rps.checkWinner();
-// rps.playRound('paper');
-// // // rps.checkWinner();
-// rps.playRound('scissors');
-// // // rps.checkWinner();
-// rps.playRound('scissors');
-console.log(rps.arrs.winLoseDraw);
-console.log(rps.arrs.playerScore, rps.currentPlayerScore);
-console.log(rps.arrs.cpuScore, rps.currentCpuScore);
-// rps.resetGame();
-// console.log(rps.arrs.winLoseDraw);
-// console.log(rps.arrs.playerScore, rps.currentPlayerScore);
-// console.log(rps.arrs.cpuScore, rps.currentCpuScore);
-
-// rps.playRound('frog');
-// rps.resetGame();
-// rps.checkWinner();
-// console.log(rps.playerMoves, rps.cpuMoves);
-// historyBarEl.classList.add('hidden');
-// currentBarEl.classList.add('hidden');
-// altContainerEl.classList.add('hidden-opacity');
-// altImgAllEl.forEach(el => el.classList.add('hidden'));
-// altImgAllEl.classList.add('hidden');
-
-// console.log(rps.arrs);
-// console.log(Object.entries(rps.arrs));
 
 ////////////////
-//Event Listeners
-
+//Event Listeners // Reset/Restart buttons
 resetBtnEl.addEventListener('mousedown', rps.resetGame.bind(rps));
 restartBtnEl.addEventListener('mousedown', rps.resetGame.bind(rps));
-/////////////////////
+///////////////////// Rock button
 altRockImgEl.addEventListener('mousedown', rps.playRound.bind(rps, 'rock'));
 altRockImgEl.addEventListener(
   'mouseover',
   rps.mouseOverColors.bind(rps, altRockImgEl, titleRockImgEl)
 );
 altRockImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
-/////////////////////
+///////////////////// Paper button
 altPaperImgEl.addEventListener('mousedown', rps.playRound.bind(rps, 'paper'));
 altPaperImgEl.addEventListener(
   'mouseover',
   rps.mouseOverColors.bind(rps, altPaperImgEl, titlePaperImgEl)
 );
 altPaperImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
-/////////////////////
+///////////////////// Scissors button
 altScissorsImgEl.addEventListener(
   'mousedown',
   rps.playRound.bind(rps, 'scissors')
@@ -349,23 +259,5 @@ altScissorsImgEl.addEventListener(
 );
 altScissorsImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
 
-// const altImgGrey = function (target1, target2) {
-//   altImgAllEl.forEach(el => {
-//     el.src = `./image/grey-${el.dataset.move}.svg`;
-//   });
-//   titleImgAllEl.forEach(el => {
-//     console.log(el);
-//     el.src = `./image/${el.dataset.move}-title-grey.svg`;
-//   });
-//   target1.src = `./image/color-${target1.dataset.move}.svg`;
-//   target2.src = `./image/${target2.dataset.move}-title-color.svg`;
-// };
-
-// altImgGrey(altRockImgEl, titleRockImgEl);
-// altImgGrey(altPaperImgEl, titlePaperImgEl);
-// altImgGrey(altScissorsImgEl, titleScissorsImgEl);
-// rps.mouseOverColors(altRockImgEl, titleRockImgEl);
-// rps.mouseOverColors(altPaperImgEl, titlePaperImgEl);
-// rps.mouseOverColors(altScissorsImgEl, titleScissorsImgEl);
-// console.log(altImgAllEl);
-// console.log(altRockImgEl.dataset.move);
+// Initial reset of game state
+rps.resetGame();
