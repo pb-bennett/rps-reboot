@@ -2,13 +2,15 @@
 //////////////////////////////
 // DECLARING ELEMENTS
 //////////////////////////////
-// Nav
+// Nav&Restart
 const rulesBtnEl = document.querySelector('.nav-btn--1');
 const resetBtnEl = document.querySelector('.nav-btn--2');
+const restartBtnEl = document.querySelector('.game-over-restart');
 // Title
 const titleRockImgEl = document.querySelector('.title-image--01');
 const titlePaperImgEl = document.querySelector('.title-image--02');
 const titleScissorsImgEl = document.querySelector('.title-image--03');
+const titleImgAllEl = document.querySelectorAll('.title-image');
 // Scores
 const playerScoreEl = document.querySelector('.player-score');
 const playerScoreContEl = document.querySelector('.player-score-container');
@@ -21,7 +23,10 @@ const altPaperImgEl = document.querySelector('.alt-img-paper');
 const altScissorsImgEl = document.querySelector('.alt-img-scissors');
 const altImgAllEl = document.querySelectorAll('.alternatives-img');
 const altContainerEl = document.querySelector('.alternatives-container');
-const gameOverTextEl = document.querySelector('.game-over-text');
+const altImageContainerEl = document.querySelector(
+  '.alternatives-img-container'
+);
+const gameOverTextEl = document.querySelectorAll('.game-over');
 
 // Current Round
 const currentBarEl = document.querySelector('.current-bar');
@@ -74,9 +79,11 @@ const rps = {
     this.updateUI();
     historyBarEl.classList.add('hidden');
     currentBarEl.classList.add('hidden');
-    gameOverTextEl.classList.add('hidden');
-    altContainerEl.classList.remove('hidden-opacity');
+    gameOverTextEl.forEach(el => el.classList.add('hidden'));
+    altTextEl.classList.remove('hidden-opacity');
     altImgAllEl.forEach(el => el.classList.remove('hidden'));
+    this.updateUI();
+    // console.log('reset');
   },
   playRound(playerMove) {
     this.arrs.playerMoves.push(playerMove);
@@ -141,6 +148,7 @@ const rps = {
     playerScoreEl.textContent = this.currentPlayerScore;
     cpuScoreEl.textContent = this.currentCpuScore;
     const i = this.roundNumber - 1;
+
     currentBarEl.classList.remove(
       'current-container-border-draw',
       'current-container-border-won',
@@ -150,30 +158,29 @@ const rps = {
       `current-container-border-${this.arrs.winLoseDraw[i]}`
     );
     if (this.checkGameOver()) {
-      console.log('game over');
-      gameOverTextEl.classList.remove('hidden');
+      // console.log('game over');
+      gameOverTextEl.forEach(el => el.classList.remove('hidden'));
       altTextEl.classList.add('hidden-opacity');
       altImgAllEl.forEach(el => el.classList.add('hidden'));
 
       currentResultTextEl.textContent = `You ${this.gameOverResult} this round, and you ${this.gameOverResult} the match!`;
     } else {
-      roundNumberEl.textContent = `Round ${this.roundNumber}`;
-      playerMoveTextEl.textContent = `You picked ${
-        this.arrs.playerMoves[i] || 'rock'
-      }`;
-      cpuMoveTextEl.textContent = `CPU picked ${
-        this.arrs.cpuMoves[i] || 'rock'
-      }`;
       currentResultTextEl.textContent = `You ${
         this.arrs.winLoseDraw[i] || 'draw'
       } this round!`;
-      playerMoveImgEl.src = `./image/color-${
-        this.arrs.playerMoves[i] || 'rock'
-      }.svg`;
-      cpuMoveImgEl.src = `./image/color-${this.arrs.cpuMoves[i] || 'rock'}.svg`;
-      if (this.roundNumber > 0) {
-        currentBarEl.classList.remove('hidden');
-      }
+    }
+    roundNumberEl.textContent = `Round ${this.roundNumber}`;
+    playerMoveTextEl.textContent = `You picked ${
+      this.arrs.playerMoves[i] || 'rock'
+    }`;
+    cpuMoveTextEl.textContent = `CPU picked ${this.arrs.cpuMoves[i] || 'rock'}`;
+    playerMoveImgEl.src = `./image/color-${
+      this.arrs.playerMoves[i] || 'rock'
+    }.svg`;
+    cpuMoveImgEl.src = `./image/color-${this.arrs.cpuMoves[i] || 'rock'}.svg`;
+    if (this.roundNumber > 0) {
+      currentBarEl.classList.remove('hidden');
+
       this.updateHistory();
     }
   },
@@ -181,7 +188,7 @@ const rps = {
     historyContainerEl.innerHTML = '';
     if (this.roundNumber > 1) {
       for (let i = 0; i < this.arrs.winLoseDraw.length - 1; i++) {
-        console.log(this.arrs.winLoseDraw[i], i);
+        // console.log(this.arrs.winLoseDraw[i], i);
         const html = `<div class="history-row history-row-border-${
           this.arrs.winLoseDraw[i]
         }">
@@ -208,38 +215,59 @@ const rps = {
       }
     }
   },
-  // updateHistory() {
-  //   historyContainerEl.innerHTML = '';
-  //   if (this.roundNumber > 1) {
-  //     this.arrs.winLoseDraw.forEach((wld, i) => {
-  //       console.log(wld, i);
-  //       const html = `<div class="history-row history-row-border-${
-  //         this.arrs.winLoseDraw[i + 1]
-  //       }">
-  //       <img
-  //         src="./image/grey-${this.arrs.playerMoves[i + 1]}.svg"
-  //         class="history-player-move-01 history-img"
-  //       />
-  //       <div class="history-text-01 history-text">
-  //         Round ${i + 2} - You picked ${
-  //         this.arrs.playerMoves[i + 1]
-  //       } and CPU picked ${this.arrs.cpuMoves[i + 1]}.<br />You ${
-  //         this.arrs.winLoseDraw[i + 1]
-  //       } the round. Score: You:${this.arrs.playerScore[i + 1]} - CPU:${
-  //         this.arrs.cpuScore[i + 1]
-  //       }
-  //       </div>
-  //       <img
-  //         src="./image/grey-${this.arrs.cpuMoves[i + 1]}.svg"
-  //         class="history-cpu-move-01 history-img"
-  //       />
-  //     </div>`;
-  //       historyContainerEl.insertAdjacentHTML('afterbegin', html);
-  //       historyBarEl.classList.remove('hidden');
-  //     });
-  //   }
-  // },
+  mouseOverColors(target1, target2) {
+    altImgAllEl.forEach(el => {
+      el.src = `./image/grey-${el.dataset.move}.svg`;
+    });
+    titleImgAllEl.forEach(el => {
+      // console.log(el);
+      el.src = `./image/${el.dataset.move}-title-grey.svg`;
+    });
+    target1.src = `./image/color-${target1.dataset.move}.svg`;
+    target2.src = `./image/${target2.dataset.move}-title-color.svg`;
+  },
+  mouseOut() {
+    altImgAllEl.forEach(el => {
+      el.src = `./image/color-${el.dataset.move}.svg`;
+    });
+    titleImgAllEl.forEach(el => {
+      // console.log(el);
+      el.src = `./image/${el.dataset.move}-title-color.svg`;
+    });
+  },
 };
+// updateHistory() {
+//   historyContainerEl.innerHTML = '';
+//   if (this.roundNumber > 1) {
+//     this.arrs.winLoseDraw.forEach((wld, i) => {
+//       console.log(wld, i);
+//       const html = `<div class="history-row history-row-border-${
+//         this.arrs.winLoseDraw[i + 1]
+//       }">
+//       <img
+//         src="./image/grey-${this.arrs.playerMoves[i + 1]}.svg"
+//         class="history-player-move-01 history-img"
+//       />
+//       <div class="history-text-01 history-text">
+//         Round ${i + 2} - You picked ${
+//         this.arrs.playerMoves[i + 1]
+//       } and CPU picked ${this.arrs.cpuMoves[i + 1]}.<br />You ${
+//         this.arrs.winLoseDraw[i + 1]
+//       } the round. Score: You:${this.arrs.playerScore[i + 1]} - CPU:${
+//         this.arrs.cpuScore[i + 1]
+//       }
+//       </div>
+//       <img
+//         src="./image/grey-${this.arrs.cpuMoves[i + 1]}.svg"
+//         class="history-cpu-move-01 history-img"
+//       />
+//     </div>`;
+//       historyContainerEl.insertAdjacentHTML('afterbegin', html);
+//       historyBarEl.classList.remove('hidden');
+//     });
+//   }
+// },
+// };
 
 // rps.cpuMove();
 // rps.cpuMove();
@@ -249,7 +277,7 @@ const rps = {
 // console.log(rps.cpuMoves);
 // rps.resetGame();
 // console.log(rps.cpuMoves);
-rps.resetGame();
+// rps.resetGame();
 // rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
 // rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
 // rps.playRound(rps.alt[Math.trunc(Math.random() * 3)]);
@@ -290,3 +318,54 @@ console.log(rps.arrs.cpuScore, rps.currentCpuScore);
 
 // console.log(rps.arrs);
 // console.log(Object.entries(rps.arrs));
+
+////////////////
+//Event Listeners
+
+resetBtnEl.addEventListener('mousedown', rps.resetGame.bind(rps));
+restartBtnEl.addEventListener('mousedown', rps.resetGame.bind(rps));
+/////////////////////
+altRockImgEl.addEventListener('mousedown', rps.playRound.bind(rps, 'rock'));
+altRockImgEl.addEventListener(
+  'mouseover',
+  rps.mouseOverColors.bind(rps, altRockImgEl, titleRockImgEl)
+);
+altRockImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
+/////////////////////
+altPaperImgEl.addEventListener('mousedown', rps.playRound.bind(rps, 'paper'));
+altPaperImgEl.addEventListener(
+  'mouseover',
+  rps.mouseOverColors.bind(rps, altPaperImgEl, titlePaperImgEl)
+);
+altPaperImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
+/////////////////////
+altScissorsImgEl.addEventListener(
+  'mousedown',
+  rps.playRound.bind(rps, 'scissors')
+);
+altScissorsImgEl.addEventListener(
+  'mouseover',
+  rps.mouseOverColors.bind(rps, altScissorsImgEl, titleScissorsImgEl)
+);
+altScissorsImgEl.addEventListener('mouseout', rps.mouseOut.bind(rps));
+
+// const altImgGrey = function (target1, target2) {
+//   altImgAllEl.forEach(el => {
+//     el.src = `./image/grey-${el.dataset.move}.svg`;
+//   });
+//   titleImgAllEl.forEach(el => {
+//     console.log(el);
+//     el.src = `./image/${el.dataset.move}-title-grey.svg`;
+//   });
+//   target1.src = `./image/color-${target1.dataset.move}.svg`;
+//   target2.src = `./image/${target2.dataset.move}-title-color.svg`;
+// };
+
+// altImgGrey(altRockImgEl, titleRockImgEl);
+// altImgGrey(altPaperImgEl, titlePaperImgEl);
+// altImgGrey(altScissorsImgEl, titleScissorsImgEl);
+// rps.mouseOverColors(altRockImgEl, titleRockImgEl);
+// rps.mouseOverColors(altPaperImgEl, titlePaperImgEl);
+// rps.mouseOverColors(altScissorsImgEl, titleScissorsImgEl);
+// console.log(altImgAllEl);
+// console.log(altRockImgEl.dataset.move);

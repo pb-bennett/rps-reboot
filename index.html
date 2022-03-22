@@ -26,14 +26,17 @@
           <img
             src="./image/rock-title-color.svg"
             class="title title-image title-image--01"
+            data-move="rock"
           />
           <img
             src="./image/paper-title-color.svg"
             class="title title-image title-image--02"
+            data-move="paper"
           />
           <img
             src="./image/scissors-title-color.svg"
             class="title title-image title-image--03"
+            data-move="scissors"
           />
         </div>
       </div>
@@ -46,19 +49,23 @@
         </div>
         <div class="alternatives-container">
           <div class="alternatives-instruction-text">Choose your technique</div>
-          <div class="game-over-text">Game Over!</div>
+          <div class="game-over game-over-text">Game Over!</div>
+
           <div class="alternatives-img-container">
             <img
               src="./image/color-rock.svg"
               class="img alternatives-img alt-img-rock"
+              data-move="rock"
             />
             <img
               src="./image/color-paper.svg"
               class="img alternatives-img alt-img-paper"
+              data-move="paper"
             />
             <img
               src="./image/color-scissors.svg"
               class="img alternatives-img alt-img-scissors"
+              data-move="scissors"
             />
           </div>
         </div>
@@ -93,6 +100,9 @@
           />
         </div>
       </div>
+    </div>
+    <div class="game-over game-over-bar">
+      <div class="game-over game-over-restart">Restart</div>
     </div>
     <div class="history-bar">
       <div class="history-bar-text">Previous rounds</div>
